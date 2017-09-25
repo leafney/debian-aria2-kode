@@ -1,11 +1,8 @@
 #!/bin/sh
 set -e
 
-# env 
-KODE_PORT=${KODE_PORT:-"80"}
-WEBUI_PORT=${WEBUI_PORT:-"6801"}
-RPC_LISTEN_PORT=${RPC_LISTEN_PORT:-"6800"}
-
+# env
+RPC_SECRET=${RPC_SECRET:-"123456"}
 
 echo "***** set php web config *****"
 
@@ -23,7 +20,7 @@ cat << EOF > $apache2_conf
 	</Directory>
 </VirtualHost>
 
-<VirtualHost *:${WEBUI_PORT}>
+<VirtualHost *:${ARIANG_PORT}>
 	ServerAdmin webmaster2@localhost
 	DocumentRoot /web/ariaNg
 	ErrorLog ${APACHE_LOG_DIR}/error.log
@@ -40,7 +37,7 @@ echo "***** set php web port *****"
 port_conf="/etc/apache2/ports.conf"
 cat << EOF > $port_conf
 Listen ${KODE_PORT}
-Listen ${WEBUI_PORT}
+Listen ${ARIANG_PORT}
 
 <IfModule ssl_module>
         Listen 443
@@ -65,11 +62,12 @@ dir=/app/aria2down
 continue=true
 input-file=/app/conf/aria2.session
 save-session=/app/conf/aria2.session
+disable-ipv6=true
 enable-rpc=true
 rpc-allow-origin-all=true
 rpc-listen-all=true
-rpc-listen-port=$RPC_LISTEN_PORT
-rpc-secret=123456
+rpc-listen-port=$RPC_PORT
+rpc-secret=$RPC_SECRET
 EOF
 
 fi
@@ -84,7 +82,7 @@ fi
 mkdir -p /app/aria2down
 mkdir -p /app/logs
 
-chown -R aria2:aria2 /app/aria2down
+chown -R www-data:www-data /app/aria2down
 chmod -Rf 777 /web/
 chmod -Rf 777 /app/
 

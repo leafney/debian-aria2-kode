@@ -1,17 +1,16 @@
 FROM debian:jessie
 MAINTAINER leafney "babycoolzx@126.com"
 
-ENV RPC_LISTEN_PORT=6800 \
-	BT_LISTEN_PORT=51413 \
-	DHT_LISTEN_PORT=51415 \
+ENV RPC_PORT=6800 \
+	KODE_PORT=80 \
+	ARIANG_PORT=6801 \
 	GOSU_VERSION=1.10 \
 	KODE_VERSION=4.21 \
 	ARIANG_VERSION=0.2.0
 
-RUN echo "deb http://mirrors.ustc.edu.cn/debian jessie main contrib non-free" > /etc/apt/sources.list && \ 
-	echo "deb-src http://mirrors.ustc.edu.cn/debian jessie main contrib non-free" >> /etc/apt/sources.list
-
-RUN apt-get update && apt-get install -y \ 
+RUN echo "deb http://mirrors.ustc.edu.cn/debian jessie main contrib non-free" > /etc/apt/sources.list \
+	&& echo "deb-src http://mirrors.ustc.edu.cn/debian jessie main contrib non-free" >> /etc/apt/sources.list \
+	&& apt-get update && apt-get install -y \
 		aria2 \
 		unzip \
 		supervisor \
@@ -22,14 +21,13 @@ RUN apt-get update && apt-get install -y \
 		php5-curl \
 		openssh-server \
 	&& echo "files = /etc/aria2/start.ini" >> /etc/supervisor/supervisord.conf \
-	&& groupadd -r aria2 && useradd -r -g aria2 aria2 \
 	&& mkdir -p /etc/aria2 \
 	&& mkdir -p /app/conf \
 	&& mkdir -p /app/aria2down \
 	&& mkdir -p /app/logs \
 	&& mkdir -p /web/kode \
 	&& rm -rf /var/lib/apt/lists/* \
-	&& aria2c -o /usr/local/bin/gosu https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64 \
+	&& aria2c -o /usr/local/bin/gosu https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-amd64 \
 	&& chmod +x /usr/local/bin/gosu \
 	&& aria2c -o /web/ariang.zip https://github.com/mayswind/AriaNg/releases/download/${ARIANG_VERSION}/aria-ng-${ARIANG_VERSION}.zip \
 	&& unzip /web/ariang.zip -d /web/ariaNg \
@@ -49,6 +47,6 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 VOLUME ["/app"]
 
-EXPOSE $RPC_LISTEN_PORT $BT_LISTEN_PORT $DHT_LISTEN_PORT
+EXPOSE $RPC_PORT $ARIANG_PORT $KODE_PORT
 
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]

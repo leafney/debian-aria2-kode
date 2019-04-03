@@ -8,9 +8,7 @@ ENV RPC_PORT=6800 \
 	KODE_VERSION=4.39 \
 	ARIANG_VERSION=1.0.1
 
-RUN echo "deb http://mirrors.ustc.edu.cn/debian jessie main contrib non-free" > /etc/apt/sources.list \
-	&& echo "deb-src http://mirrors.ustc.edu.cn/debian jessie main contrib non-free" >> /etc/apt/sources.list \
-	&& apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y \
 		aria2 \
 		unzip \
 		supervisor \

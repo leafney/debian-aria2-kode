@@ -6,7 +6,7 @@ ENV KODE_PORT=6880 \
 	KODE_VERSION=4.39 \
 
 RUN apt-get update && apt-get install -y \
-		aria2c \
+		aria2 \
 		unzip \
 		supervisor \
 		apache2 \

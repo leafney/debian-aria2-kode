@@ -16,7 +16,9 @@ RUN apt-get update && apt-get install -y \
 		php5-curl \
 		openssh-server \
 	&& echo "files = /etc/aria2/start.ini" >> /etc/supervisor/supervisord.conf \
+	&& mkdir -p /etc/aria2 \
 	&& mkdir -p /app/conf \
+	&& mkdir -p /app/aria2down \
 	&& mkdir -p /app/logs \
 	&& mkdir -p /web/kode \
 	&& rm -rf /var/lib/apt/lists/* \
